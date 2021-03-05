@@ -7,7 +7,7 @@ RUN mkdir app/inbox
 RUN mkdir app/outbox
 
 # Copy application files to app directory
-COPY ./target/camel-simple-app-1.0-jar-with-dependencies.jar /app
+COPY ./target/camel-simple-app-1.0-executable-jar.jar /app
 COPY ./inbox/inputFile.txt /app/inbox
 
 # Display the created directory
@@ -18,3 +18,6 @@ WORKDIR /app
 
 # List deployed application files
 RUN ls -ltra
+
+# Execute the JAR file
+CMD ["java","-jar","camel-simple-app-1.0-executable-jar.jar"]
