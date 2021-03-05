@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="upperCaseProcessor" class="org.bhushan.test.UpperCaseProcessor"/>
+    <bean id="lowerCaseProcessor" class="org.bhushan.test.LowerCaseProcessor"/>
+
+    <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
+        <route id="inputFileRoute">
+            <from uri="file://D:/app/inbox?filename=inputFile.txt&amp;noop=true"/>
+            <log message="*** Input message read from file: ${headers.CamelFileAbsolutePath}"/>
+            <log message="*** Message: ${body}"/>
+            <to uri="direct:inputChannel"/>
+        </route>
+
+        <route id="multicastRoute">
+            <from uri="direct:inputChannel"/>
+            <log message="*** Multicasting the file content to different processors ..."/>
+            <multicast parallelProcessing="true">
+                <to uri="direct:upperCaseTransformInputChannel"/>
+                <to uri="direct:lowerCaseTransformInputChannel"/>
+            </multicast>
+        </route>
+
+        <route id="upperCaseTransformRoute">
+            <from uri="direct:upperCaseTransformInputChannel"/>
+            <log message="*** Transforming the message to upper case"/>
+            <process ref="upperCaseProcessor"/>
+            <to uri="file://outbox?filename=upperCaseOutputFile.txt"/>
+        </route>
+
+        <route id="lowerCaseTransformRoute">
+            <from uri="direct:lowerCaseTransformInputChannel"/>
+            <log message="*** Transforming the message to lower case"/>
+            <process ref="lowerCaseProcessor"/>
+            <to uri="file://outbox?filename=lowerCaseOutputFile.txt"/>
+        </route>
+    </camelContext>
+</beans>

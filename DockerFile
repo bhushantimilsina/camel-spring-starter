@@ -1,0 +1,20 @@
+# Docker File
+FROM openjdk:8
+
+# Create app directory to deploy the application
+RUN mkdir app
+RUN mkdir app/inbox
+RUN mkdir app/outbox
+
+# Copy application files to app directory
+COPY ./target/camel-simple-app-1.0-jar-with-dependencies.jar /app
+COPY ./inbox/inputFile.txt /app/inbox
+
+# Display the created directory
+RUN ls -ltra
+
+# Change the working directory to app
+WORKDIR /app
+
+# List deployed application files
+RUN ls -ltra
