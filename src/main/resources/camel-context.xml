@@ -10,7 +10,7 @@
 
     <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
         <route id="inputFileRoute">
-            <from uri="file://D:/app/inbox?filename=inputFile.txt&amp;noop=true"/>
+            <from uri="file://inbox?filename=inputFile.txt&amp;noop=true"/>
             <log message="*** Input message read from file: ${headers.CamelFileAbsolutePath}"/>
             <log message="*** Message: ${body}"/>
             <to uri="direct:inputChannel"/>
