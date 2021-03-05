@@ -5,13 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.bhushan.test</groupId>
-    <artifactId>camel-simple-app</artifactId>
+    <artifactId>camel-spring-starter</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-
-    <name>camel-simple-app</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

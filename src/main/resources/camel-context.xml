@@ -5,9 +5,6 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-    <bean id="upperCaseProcessor" class="org.bhushan.test.UpperCaseProcessor"/>
-    <bean id="lowerCaseProcessor" class="org.bhushan.test.LowerCaseProcessor"/>
-
     <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
         <route id="inputFileRoute">
             <from uri="file://inbox?filename=inputFile.txt&amp;noop=true"/>
@@ -16,29 +13,5 @@
             <to uri="direct:inputChannel"/>
         </route>
 
-        <route id="multicastRoute">
-            <from uri="direct:inputChannel"/>
-            <log message="*** Multicasting the file content to different processors ..."/>
-            <multicast parallelProcessing="true">
-                <to uri="direct:upperCaseTransformInputChannel"/>
-                <to uri="direct:lowerCaseTransformInputChannel"/>
-            </multicast>
-        </route>
-
-        <route id="upperCaseTransformRoute">
-            <from uri="direct:upperCaseTransformInputChannel"/>
-            <log message="*** Transforming the message to upper case"/>
-            <process ref="upperCaseProcessor"/>
-            <to uri="file://outbox?filename=upperCaseOutputFile.txt"/>
-            <log message="*** Upper case output file: ${headers.CamelFileNameProduced}"/>
-        </route>
-
-        <route id="lowerCaseTransformRoute">
-            <from uri="direct:lowerCaseTransformInputChannel"/>
-            <log message="*** Transforming the message to lower case"/>
-            <process ref="lowerCaseProcessor"/>
-            <to uri="file://outbox?filename=lowerCaseOutputFile.txt"/>
-            <log message="*** Lower case output file: ${headers.CamelFileNameProduced}"/>
-        </route>
     </camelContext>
 </beans>
