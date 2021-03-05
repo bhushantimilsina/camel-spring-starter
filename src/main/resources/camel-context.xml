@@ -10,8 +10,7 @@
 
     <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
         <route id="inputFileRoute">
-            <!--<from uri="file://inbox?filename=inputFile.txt&amp;noop=true"/>-->
-            <from uri="file://inbox"/>
+            <from uri="file://inbox?filename=inputFile.txt&amp;noop=true"/>
             <log message="*** Input message read from file: ${headers.CamelFileAbsolutePath}"/>
             <log message="*** Message: ${body}"/>
             <to uri="direct:inputChannel"/>
@@ -31,6 +30,7 @@
             <log message="*** Transforming the message to upper case"/>
             <process ref="upperCaseProcessor"/>
             <to uri="file://outbox?filename=upperCaseOutputFile.txt"/>
+            <log message="*** Upper case output file: ${headers.CamelFileNameProduced}"/>
         </route>
 
         <route id="lowerCaseTransformRoute">
@@ -38,6 +38,7 @@
             <log message="*** Transforming the message to lower case"/>
             <process ref="lowerCaseProcessor"/>
             <to uri="file://outbox?filename=lowerCaseOutputFile.txt"/>
+            <log message="*** Lower case output file: ${headers.CamelFileNameProduced}"/>
         </route>
     </camelContext>
 </beans>
